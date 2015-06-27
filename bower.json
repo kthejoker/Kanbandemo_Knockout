@@ -1,0 +1,9 @@
+{
+  "name": "kanbandemo",
+  "dependencies": {
+    "requirejs": null,
+    "jquery": ">= 1.8.0",
+    "qunit": "~1.12.0",
+    "knockout.js": "~3.3.0"
+  }
+}

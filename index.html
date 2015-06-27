@@ -1,0 +1,37 @@
+<!Doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanban demo</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+
+  <script data-main="app/config" src="bower_components/requirejs/require.js"></script>
+</head>
+<body>
+  <h1>Kanban Demo</h1>
+<!--   <filter-set params='f1: f1, selectedFilter: selectedFilter'></filter-set> -->
+  <filter-set params='f1: f2, selectedFilter: selectedFilter'></filter-set>
+
+
+<div class="row">
+  <div class="col-md-3">
+<task-cards params='TaskList: Queue, selectedFilter: selectedFilter'></task-card>
+  </div>
+  <div class="col-md-3">
+  <task-cards params='TaskList: Working, selectedFilter: selectedFilter'></task-card></div>
+  <div class="col-md-3">
+  <task-cards params='TaskList: UAT, selectedFilter: selectedFilter'></task-card></div>
+   <div class="col-md-3">
+   <task-cards params='TaskList: Done, selectedFilter: selectedFilter'></task-card></div>
+</div>
+
+</body>
+</html>
