@@ -1,4 +1,20 @@
-<div data-bind='text: FilterType'>Type</div>
-<!-- ko foreach: Filters -->
-<div data-bind='click: $parent.selectFilter, text: $data'>Filter</div>
+<!-- ko with: Filter -->
+<div class='row'>
+<div class='col-md-8'>
+    <h4 data-bind='text: Title'>Type</h4>
+    </div>
+    <div class="col-md-2">
+  <button type="button" data-bind="click: $parent.clearFilter" class="btn btn-default">X</button>
+<!--   <button type="button" class="btn btn-default">Middle</button>
+  <button type="button" class="btn btn-default">Right</button> -->
+</div>
+</div>
+<div class="list-group">
+
+<!-- ko foreach: Values -->
+  <button type="button" class="list-group-item"
+   data-bind='click: $parents[1].selectFilter, text: $data'>Filter</button>
+<!-- /ko -->
+
+</div>
 <!-- /ko -->

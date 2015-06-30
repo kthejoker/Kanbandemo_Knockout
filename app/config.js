@@ -5,7 +5,9 @@ require.config({
     "bower_components": "../bower_components",
     "jquery": "../bower_components/jquery/dist/jquery",
 	"text" : "../bower_components/text/text",
-	"domReady" : "../bower_components/domReady/domReady"
+	"domReady" : "../bower_components/domReady/domReady",
+	"jquery-ui" : "../bower_components/jqueryui-master/ui"
+	
   },
   map: {
     "*": {

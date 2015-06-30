@@ -1,78 +1,136 @@
-// to depend on a bower installed component:
+ // to depend on a bower installed component:
 // define(['component/componentName/file'])
 
-define(["jquery", "knockout", "domReady"], function($, ko, domReady) {
-	
-	 ko.components.register('task-card', { require: 'components/task-card/task-card' });
-	 ko.components.register('task-cards', { require: 'components/task-cards/task-cards' });
-	 ko.components.register('filter-set', { require: 'components/filter-set/filter-set' });
-//  	 ko.components.register('task-card', {"viewModel": {require : 'components/task-card/task-card-raw' }	, "template": {require: "text!components/task-card/task-card.html"}});
-	
-var vm = function() {
-	var self = this;
+define(["jquery", "knockout", "domReady", "models/Task", "models/Filter", "models/TaskList",
+ "utils", "bower_components/knockout-sortable/knockout-sortable"], 
+ function($, ko, domReady, Task, Filter, TaskList, sortable) {
+    ko.bindingHandlers.sortable.beforeMove = function(arg) {
+        arg.item.Status(arg.targetParent()[0].Status());
+        arg.cancelDrop = true;
+    };
+
+        ko.bindingHandlers.sortable.afterMove = function(arg) {
+      //  arg.item.Status(arg.targetParent()[0].Status());
+        console.log(arg.targetParent());
+        console.log(arg.targetParent()[0].Title());
+    };
+    
+    function registerComponent(componentName) {
+        requireName = 'components/{0}/{0}'.format(componentName, componentName)
+        ;
+        ko.components.register(componentName, {require: requireName});
+    
+    
+    }
+    
+    registerComponent('task-card');
+    registerComponent('task-cards');
+    registerComponent('filter-set');
+    
+    var vm = function() {
+        var self = this;
+        
+ self.taskList = ko.observableArray([]);
+         
+        self.selectedFilter = ko.observable();
+
+        self.taskList.push ( 
+             new Task({Title: "View task component on Page",
+            AssignedTo: "Cynthia Kinkeade",
+            Status: "Done",
+            Project: "Team Kanban",
+            Stream: "Internal Projects"
+        })
+        );
 
 
-	self.t = ko.observable({ Title: "View task component on Page",
-	AssignedTo: "Cynthia Kinkeade",
-	Status: "UAT",
-	Project: "Team Kanban",
-	Stream: "Internal Projects"
-	});
+       self.taskList.push ( 
+            new Task({Title: "Filter task components on page",
+            AssignedTo: "Kyle Hale",
+            Status: "UAT",
+            Project: "Team Kanban",
+            Stream: "Internal Projects"
+        }) 
+        ); 
 
-	self.t1 = ko.observable({ Title: "Filter task components on page",
-	AssignedTo: "Kyle Hale",
-	Status: "Working",
-	Project: "Team Kanban",
-	Stream: "Internal Projects"
-	});
+               self.taskList.push ( 
+            new Task({Title: "Initial Assessment",
+            AssignedTo: "Kyle Hale",
+            Status: "Working",
+            Project: "Cash Flow Reporting",
+            Stream: "MSBI"
+        }) 
+        );
 
-	self.t2 = ko.observableArray([self.t, self.t1]);
+                       self.taskList.push ( 
+            new Task({Title: "Change filters to ",
+            AssignedTo: "Kyle Hale",
+            Status: "Working",
+            Project: "Cash Flow Reporting",
+            Stream: "Internal Projects"
+        }) 
+        );
 
-	self.Queue = ko.computed(function() {
-return ko.utils.arrayFilter(self.t2(), function(task) {
-                return task().Status == "Queue";
+        self.Queue = new TaskList(
+ko.computed(function() {
+            return ko.utils.arrayFilter(self.taskList(), function(task) {
+                return task.Status() == "Queue";
             });
+        
+        }), self.selectedFilter
 
-	});
+        );
 
-	self.Working = ko.computed(function() {
-return ko.utils.arrayFilter(self.t2(), function(task) {
-                return task().Status == "Working";
+       
+        
+        
+        self.Working = new TaskList ( ko.computed(function() {
+            return ko.utils.arrayFilter(self.taskList(), function(task) {
+                return task.Status() == "Working";
             });
-
-	});
-
-	self.UAT = ko.computed(function() {
-return ko.utils.arrayFilter(self.t2(), function(task) {
-                return task().Status == "UAT";
+        
+        }) , self.selectedFilter );
+        
+        self.UAT = new TaskList ( ko.computed(function() {
+            return ko.utils.arrayFilter(self.taskList(), function(task) {
+                return task.Status() == "UAT";
             });
+        
+        }) , self.selectedFilter );
+        
+//         self.Done = ko.computed(function() {
+//             return ko.utils.arrayFilter(self.taskList(), function(task) {
+//                 return task.Status() == "Done";
+//             });
+        
+//         });
+        
+        self.FiltersToBuild = ['AssignedTo', 'Stream', 'Project'];
+        self.Filters = new Array();
+        
+        self.FiltersToBuild.forEach(function(filter) {
+            newFilter = new Filter(filter, ko.computed(function() {
+                return ko.utils.arrayGetDistinctValues(
+                ko.utils.arrayMap(self.taskList(), 
+                function(task) {
+                    return task[filter]();
+                }));
+            
+            }));
+             if (filter == 'AssignedTo') { newFilter.Title('Assigned To'); }
 
-	});
+            self.Filters.push(newFilter);
+           
+        
+        });
+        
+        
 
-		self.Done = ko.computed(function() {
-return ko.utils.arrayFilter(self.t2(), function(task) {
-                return task().Status == "Done";
-            });
-
-	});
-
-    self.Filter = function(Title, Values) {
-
-    					var self = this;
-
-    					self.filterType = ko.observable(Title);
-    					self.filterValues = ko.observableArray(Values);
-
-    			};
-
-    			f2 = new Filter("AssignedTo", ["Kyle Hale", "Cynthia Kinkeade"]);
-    			//f1 = new Filter("Stream", ["Internal Projects"]);
-
-	self.selectedFilter = ko.observable();
-}
-	
-domReady( 
-   function () {
-  ko.applyBindings(vm); }
-  );
+    }
+    
+    domReady(
+    function() {
+        ko.applyBindings(vm);
+    }
+    );
 });

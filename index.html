@@ -16,21 +16,38 @@
   <script data-main="app/config" src="bower_components/requirejs/require.js"></script>
 </head>
 <body>
+<div class='container'>
   <h1>Kanban Demo</h1>
 <!--   <filter-set params='f1: f1, selectedFilter: selectedFilter'></filter-set> -->
-  <filter-set params='f1: f2, selectedFilter: selectedFilter'></filter-set>
+<div class="row">
+<div class="col-md-4">
+  <filter-set params='f1: Filters[0], selectedFilter: selectedFilter'></filter-set>
+  </div>
+  <div class="col-md-4">
+    <filter-set params='f1: Filters[1], selectedFilter: selectedFilter'></filter-set>
+    </div>
+     <div class="col-md-4">
+      <filter-set params='f1: Filters[2], selectedFilter: selectedFilter'></filter-set>
+      </div>
+  </div>
 
 
 <div class="row">
-  <div class="col-md-3">
-<task-cards params='TaskList: Queue, selectedFilter: selectedFilter'></task-card>
+  <div class="col-md-4">
+  <h3>Queue</h3>
+<task-cards params='TaskList: Queue'></task-card>
   </div>
-  <div class="col-md-3">
-  <task-cards params='TaskList: Working, selectedFilter: selectedFilter'></task-card></div>
-  <div class="col-md-3">
-  <task-cards params='TaskList: UAT, selectedFilter: selectedFilter'></task-card></div>
-   <div class="col-md-3">
+  <div class="col-md-4">
+  <h3>Working</h3>
+  <task-cards params='TaskList: Working'></task-card></div>
+  <div class="col-md-4">
+  <h3>UAT</h3>
+  <task-cards params='TaskList: UAT'></task-card></div>
+   <!--<div class="col-md-3">
+   <h3>Done</h3>
    <task-cards params='TaskList: Done, selectedFilter: selectedFilter'></task-card></div>
+   -->
+</div>
 </div>
 
 </body>
